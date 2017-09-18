@@ -408,6 +408,8 @@ class Player:
 
     def discover_cure(self, color, discards):
         """
+        Searches the current player's cards and determines if they can discover a cure.
+        If they can, the cards are discarded and a cure is added.
         """
         if gs.cities[self.location].research_station is True:
             if gs['cures'][color] != 1 or gs['cures'][color] != 2:
