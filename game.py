@@ -279,7 +279,7 @@ class Player:
             self.location = _to
             self.reduce_action()
         else:
-            return "{0} isn\'t connected to {1}".format(self.location, _to)
+            return "{0} isn\'t connected to {1}.".format(self.location, _to)
 
     def charter_flight(self, _to):
         """
@@ -743,7 +743,11 @@ class PandemicCmd(cmd.Cmd):
     """
     def do_drive(self, loc):
         """Drive to a connected location"""
-        gs.current_player().drive(loc)
+        msg = gs.current_player().drive(loc)
+        if msg:
+            print(msg)
+        else:
+            print("You're now at {0}.".format(gs.current_player().location))
         self.do_connections()
 
     def do_direct_flight(self, loc):
@@ -774,7 +778,7 @@ class PandemicCmd(cmd.Cmd):
         """Discovers a cure, if possible."""
         gs.current_player().discover_cure()
 
-    def do_end_turn(self):
+    def do_end_turn(self, arg):
         """Ends turn"""
         # TODO
         print_end_turn()
@@ -783,9 +787,17 @@ class PandemicCmd(cmd.Cmd):
     def do_connections(self, city=''):
         """Prints the current connections the current player is in, or for a city"""
         if city:
-            print(gs.cities[city].connections)
+            try:
+                print(gs.cities[city].connections)
+            except:
+                print("I can't find the city '{0}'. :(".format(city))
+            
         else:
             print(gs.cities[gs.current_player().location].connections)
+
+    def do_whereami(self, arg):
+        """Prints the current location"""
+        print(gs.current_player().location)
 
     def help_combat(self):
         print('Combat is not implemented in this program.')
